@@ -13,7 +13,6 @@
     "babel-preset-react": "^6.3.13",
     "babelify": "^7.2.0",
     "browser-sync": "^2.10.0",
-    "browserify": "^12.0.1",
     "chai": "^3.4.1",
     "co-supertest": "0.0.10",
     "del": "^2.2.0",
@@ -32,7 +31,6 @@
     "gulp-streamify": "^1.0.2",
     "gulp-uglify": "^1.5.1",
     "jsdoc": "^3.4.0",
-    "reactify": "^1.1.1",
     "run-sequence": "^1.1.5",
     "sassdoc": "^2.1.18",
     "supertest": "^1.1.0",
@@ -41,7 +39,6 @@
     "watchify": "^3.6.1"
   },
   "dependencies": {
-    "aliasify": "^1.7.2",
     "babel-core": "^6.1.2",
     "babel-polyfill": "^6.0.16",
     "browserify": "^12.0.1",
@@ -50,6 +47,9 @@
     "koa-mount": "^1.3.0",
     "koa-route": "^2.4.2",
     "koa-static": "^1.5.2",
-    "lodash": "^3.10.1"
+    "lodash": "^3.10.1",
+    "react": "^0.14.2",
+    "react-dom": "^0.14.2"
+
   }
 }

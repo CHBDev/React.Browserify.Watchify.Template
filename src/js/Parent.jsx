@@ -1,7 +1,8 @@
-var Child = require('./Child.jsx');
+import React from 'react';
+import Child from './Child';
 
-var Parent = React.createClass({
-  render: function(){
+export default class Parent extends React.Component {
+  render() {
 
     return (
       <div className="holder">
@@ -14,6 +15,4 @@ var Parent = React.createClass({
       </div>
     )
   }
-});
-
-module.exports = Parent;
+}
