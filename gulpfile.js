@@ -25,7 +25,7 @@ var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var browserify = require('browserify');
 var watchify = require('watchify');
-var reactify = require('reactify');
+//var reactify = require('reactify');
 //var streamify = require('gulp-streamify');
 var htmlreplace = require('gulp-html-replace');
 var replace = require('gulp-replace');
@@ -37,7 +37,6 @@ var spawn = require('child_process').spawn;
 var sync = require('browser-sync').create();
 var notify = require('gulp-notify');
 var babelify = require('babelify');
-// babelify.configure({presets:["es2015", "react"]});
 var rimraf = require('rimraf');
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
@@ -76,7 +75,7 @@ locs.BUILD_PROD_CSS_FOLDER = locs.BUILD_PROD_FOLDER + '/' + locs.CSS_NAME;
 locs.BUNDLE_PROD_FILE = locs.BUILD_PUBLIC_JS_FOLDER + '/' + locs.BUNDLE_PUBLIC_NAME;
 locs.BUNDLE_DEV_FILE = locs.BUILD_DEV_JS_FOLDER + '/' + locs.BUNDLE_DEV_NAME;
 locs.INDEX_FILE = locs.SRC_FOLDER + '/' + locs.INDEX_NAME;
-locs.SRC_JS_FOLDER = locs.SRC_FOLDER + '/' + locs.JS_NAME
+locs.SRC_JS_FOLDER = locs.SRC_FOLDER + '/' + locs.JS_NAME;
 locs.APP_FILE = locs.SRC_JS_FOLDER + '/' + locs.APP_NAME;
 
 locs.SCSS_ALL = './' + locs.SRC_FOLDER + '/scss/**/*.scss';
@@ -103,9 +102,9 @@ gulp.task('build_prod_html', function(){
 
 var browserify_prod_props = {
         entries: [locs.APP_FILE],
-        extensions: ['.jsx'],
+        extensions: ['.js','.jsx'],
         insertGlobals: false,
-        transform: [babelify],
+        transform: [babelify.configure({presets:["es2015", "react"]})],
         global: true,
         debug: false,
         cache: {},
@@ -151,7 +150,7 @@ var sass_prod_options = {
 };
 
 gulp.task('build_prod_scss', function(){
-  console.log(locs.SCSS_ALL)
+  console.log(locs.SCSS_ALL);
   return gulp
       .src(locs.SCSS_ALL)
       .pipe(sass(sass_prod_options).on('error', sass.logError))
@@ -243,7 +242,7 @@ var dontHangOnErrors = function(){
 };
 
 gulp.task('build_dev_html', function(){
-  console.log('START DEV HTML BUILD')
+  console.log('START DEV HTML BUILD');
   return gulp.src(locs.INDEX_FILE)
     .pipe(htmlreplace({
       'js': locs.JS_NAME + '/' + locs.BUNDLE_DEV_NAME //NOTE: this is the relative file path referenced from server root
@@ -252,19 +251,19 @@ gulp.task('build_dev_html', function(){
     .pipe(sync.stream())
 });
 
-// var browserify_dev_props = {
-//         entries: [locs.APP_FILE],
-//         extensions: ['.jsx'],
-//         insertGlobals: true,
-//         transform: [reactify, babelify],
-//         global: true,
-//         debug: true,
-//         cache: {},
-//         packageCache: {},
-//         fullPaths: true
-// };
+var browserify_dev_props = {
+        entries: [locs.APP_FILE],
+        extensions: ['.js','.jsx'],
+        insertGlobals: true,
+        transform: [babelify.configure({presets:["es2015", "react"]})],
+        global: true,
+        debug: true,
+        cache: {},
+        packageCache: {},
+        fullPaths: true
+};
 
-//var bundler_dev = watchify(browserify(browserify_dev_props));
+var bundler_dev = watchify(browserify(browserify_dev_props));
 
 gulp.task('build_dev_js', function(){
   return build_dev_js();
@@ -272,20 +271,17 @@ gulp.task('build_dev_js', function(){
 
 var build_dev_js = function(){
   console.log('START DEV JS BUILD');
-    
-  browserify(locs.APP_FILE)
-    .transform(babelify, {presets: ["es2015", "react"]})
-    .bundle()
-    .pipe(sourcestream('app.js'))
+  return bundler_dev.bundle()
+    .on('error', dontHangOnErrors)
+    .pipe(sourcestream(locs.BUNDLE_DEV_NAME))
     .pipe(gulp.dest(locs.BUILD_DEV_JS_FOLDER))
-    .pipe(sync.stream());
-
+    .pipe(sync.stream())
 };
 
 gulp.task('reload', function(){
   console.log("SERVER RESTART");
   sync.reload();
-})
+});
 
 gulp.task('watch_dev', function() {
 
@@ -293,9 +289,9 @@ gulp.task('watch_dev', function() {
 
   gulp.watch(locs.SCSS_ALL, ['build_dev_scss']);
 
-   // bundler_dev.on('update', function(){
-  //   build_dev_js();
-  // });
+  bundler_dev.on('update', function(){
+    build_dev_js();
+  });
 
   gulp.watch(locs.BUNDLE_DEV_FILE, ['reload']);
 });
@@ -308,7 +304,7 @@ var sass_dev_options = {
 };
 
 gulp.task('build_dev_scss', function(){
-  console.log(locs.SCSS_ALL)
+  console.log(locs.SCSS_ALL);
   return gulp
       .src(locs.SCSS_ALL)
       .pipe(sass(sass_dev_options).on('error', sass.logError))

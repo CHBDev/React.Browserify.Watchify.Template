@@ -1,13 +1,17 @@
-var Child = require('./Child.jsx');
-var Parent = require('./Parent.jsx');
+import ReactDOM from 'react-dom';
+import React from 'react';
+import Parent from './Parent';
 
-var App = {};
+export default class App extends React.Component {
+  render () {
+    return (
+        <Parent />
+    );
+  }
+}
+
 console.log(React);
-React.render(
-             <Parent />,
-              document.getElementById('app')
-              );
-
+ReactDOM.render(<App />, window.document.getElementById('app'));
 
 /**
  * @param  {string}
@@ -25,5 +29,3 @@ var myFatArrowFunction = function(){
 };
 
 myFatArrowFunction();
-
-module.exports = App;
