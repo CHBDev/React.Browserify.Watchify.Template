@@ -37,6 +37,7 @@ var spawn = require('child_process').spawn;
 var sync = require('browser-sync').create();
 var notify = require('gulp-notify');
 var babelify = require('babelify');
+babelify.configure({presets:["es2015", "react"]});
 var rimraf = require('rimraf');
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');

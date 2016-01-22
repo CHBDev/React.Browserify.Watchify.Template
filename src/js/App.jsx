@@ -20,4 +20,10 @@ var myJSDocFunction1 = function(test1, test2, test3, test4){
   return test1;
 };
 
+var myFatArrowFunction = function(){
+  return (()=>{console.log("Fat Arrow")});
+};
+
+myFatArrowFunction();
+
 module.exports = App;
