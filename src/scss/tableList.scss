@@ -1,0 +1,22 @@
+.table {
+  display: table;
+  border-collapse: collapse;
+  .table-caption {
+    display: table-caption;
+  }
+  .table-header {
+    display: table-header-group;
+    font-weight: bold;
+  }
+  .table-body {
+    display: table-row-group;
+  }
+  .table-row {
+    display: table-row;
+  }
+  .table-cell {
+    display: table-cell;
+    padding: 5px 12px;
+    min-width: 10px;
+  }
+}
