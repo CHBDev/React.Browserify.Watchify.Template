@@ -1,7 +1,10 @@
 //import
-@import 'partial1';
+@import 'colors';
+@import 'form';
+@import 'gridCard';
 @import 'tableList';
-@import 'vehicleTable';
+@import 'vehicles';
+@import 'view';
 
 //vars
 $font-stack: Helvetica, sans-serif;
@@ -12,86 +15,14 @@ body {
   color: $primary-color;
 }
 
-//nesting
-nav {
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+.app-pane {
+  width: 550px;
+  .app-header {
+    overflow: hidden;
   }
-
-  li { display: inline-block; }
-
-  a {
-    display: block;
-    padding: 6px 12px;
-    text-decoration: none;
+  .app-subHeader {
+    overflow: hidden;
+    margin: 5px 5px 20px;
+    font-size: smaller;
   }
-}
-
-//mixins
-@mixin border-radius($radius) {
-  -webkit-border-radius: $radius;
-     -moz-border-radius: $radius;
-      -ms-border-radius: $radius;
-          border-radius: $radius;
-}
-
-.box {
-  @include border-radius(10px);
-  background-color: orange;
-}
-
-
-//extend / inheritance
-.message {
-  border: 1px solid #ccc;
-  padding: 10px;
-  color: #333;
-}
-
-.success {
-  @extend .message;
-  border-color: green;
-}
-
-.error {
-  @extend .message;
-  border-color: red;
-}
-
-.warning {
-  @extend .message;
-  border-color: yellow;
-}
-
-//operators
-.container { width: 100%; }
-
-
-article[role="main"] {
-  float: left;
-  width: 600px / 960px * 100%;
-}
-
-aside[role="complimentary"] {
-  float: right;
-  width: 300px / 960px * 100%;
-}
-
-//functions
-
-$grid-width: 40px;
-$gutter-width: 10px;
-
-@function grid-width($n) {
-  @return $n * $grid-width + ($n - 1) * $gutter-width;
-}
-
-#sidebar { width: grid-width(5); }
-
-
-//standard css
-.red {
-  background-color: red;
 }

@@ -54,11 +54,20 @@ var locs = {};
 locs.INDEX_NAME = "index.html";
 locs.APP_NAME = 'App.jsx';
 locs.BUNDLE_NAME = 'bundle';
+locs.REACT_NAME = 'react';
+locs.FONT_AWESOME_NAME = "font-awesome";
 locs.JS_NAME = 'js';
 locs.CSS_NAME = 'css';
+locs.FONTS_NAME = 'fonts';
 
 locs.BUNDLE_PROD_NAME = locs.BUNDLE_NAME + '.min.js';
 locs.BUNDLE_DEV_NAME = locs.BUNDLE_NAME + '.js';
+
+locs.REACT_PROD_NAME = locs.REACT_NAME + '.min.js';
+locs.REACT_DEV_NAME = locs.REACT_NAME + '.js';
+
+locs.FONT_AWESOME_PROD_NAME = locs.FONT_AWESOME_NAME + '.min.css';
+locs.FONT_AWESOME_DEV_NAME = locs.FONT_AWESOME_NAME + '.css';
 
 locs.PROD_FOLDER = 'public';
 locs.SRC_FOLDER = 'src';
@@ -68,15 +77,19 @@ locs.DEV_FOLDER = 'dev';
 locs.BUILD_DEV_FOLDER = locs.BUILD_FOLDER + '/' + locs.DEV_FOLDER;
 locs.BUILD_DEV_JS_FOLDER = locs.BUILD_DEV_FOLDER + '/' + locs.JS_NAME;
 locs.BUILD_DEV_CSS_FOLDER = locs.BUILD_DEV_FOLDER + '/' + locs.CSS_NAME;
+locs.BUILD_DEV_FONTS_FOLDER = locs.BUILD_DEV_FOLDER + '/' + locs.FONTS_NAME;
 locs.BUILD_PROD_FOLDER = locs.BUILD_FOLDER + '/' + locs.PROD_FOLDER;
 locs.BUILD_PROD_JS_FOLDER = locs.BUILD_PROD_FOLDER + '/' + locs.JS_NAME;
 locs.BUILD_PROD_CSS_FOLDER = locs.BUILD_PROD_FOLDER + '/' + locs.CSS_NAME;
+locs.BUILD_PROD_FONTS_FOLDER = locs.BUILD_PROD_FOLDER + '/' + locs.FONTS_NAME;
 
 locs.BUNDLE_PROD_FILE = locs.BUILD_PUBLIC_JS_FOLDER + '/' + locs.BUNDLE_PUBLIC_NAME;
 locs.BUNDLE_DEV_FILE = locs.BUILD_DEV_JS_FOLDER + '/' + locs.BUNDLE_DEV_NAME;
 locs.INDEX_FILE = locs.SRC_FOLDER + '/' + locs.INDEX_NAME;
 locs.SRC_JS_FOLDER = locs.SRC_FOLDER + '/' + locs.JS_NAME;
 locs.APP_FILE = locs.SRC_JS_FOLDER + '/' + locs.APP_NAME;
+// locs.DB_PATH = ~/your_special_folder/wave1-blackbox/db.json
+locs.DB_PATH = 'db.json'; //if you just want to copy it into your react repo
 
 locs.SCSS_ALL = './' + locs.SRC_FOLDER + '/scss/**/*.scss';
 
@@ -94,7 +107,9 @@ gulp.task('build_prod_html', function(){
   console.log('START PROD HTML BUILD');
   return gulp.src(locs.INDEX_FILE)
     .pipe(htmlreplace({
-      'js': locs.JS_NAME + '/' + locs.BUNDLE_PROD_NAME //NOTE: this is the relative file path referenced from server root
+      'fontawesome': locs.CSS_NAME + '/' + locs.FONT_AWESOME_PROD_NAME, //NOTE: this is the relative file path referenced from server root
+      'reactjs': locs.JS_NAME + '/' + locs.REACT_PROD_NAME, //NOTE: this is the relative file path referenced from server root
+      'bundlejs': locs.JS_NAME + '/' + locs.BUNDLE_PROD_NAME //NOTE: this is the relative file path referenced from server root
     }))
     .pipe(gulp.dest(locs.BUILD_PROD_FOLDER))
     .pipe(sync.stream())
@@ -160,7 +175,20 @@ gulp.task('build_prod_scss', function(){
 
 });
 
-gulp.task('build_prod', ['build_prod_html', 'build_prod_scss', 'build_prod_js']);
+gulp.task('build_prod_3rd_party', function() {
+  console.log('START PROD 3RD PARTY BUILD');
+  gulp.src("node_modules/font-awesome/fonts/**/")
+      .on('error', dontHangOnErrors)
+      .pipe(gulp.dest(locs.BUILD_PROD_FONTS_FOLDER));
+  gulp.src("node_modules/font-awesome/css/" + locs.FONT_AWESOME_PROD_NAME)
+      .on('error', dontHangOnErrors)
+      .pipe(gulp.dest(locs.BUILD_PROD_CSS_FOLDER));
+  gulp.src("node_modules/react/dist/" + locs.REACT_PROD_NAME)
+      .on('error', dontHangOnErrors)
+      .pipe(gulp.dest(locs.BUILD_PROD_JS_FOLDER));
+});
+
+gulp.task('build_prod', ['build_prod_html', 'build_prod_scss', 'build_prod_js', 'build_prod_3rd_party']);
 
 gulp.task('serve_prod', ['build_prod', 'watch_prod'], function(){
   console.log("Production Server Start");
@@ -177,9 +205,9 @@ gulp.task('koa', function(){
 });
 
 gulp.task('jsdoc', function(cb){
-  
+
   exec('jsdoc ./' + locs.SRC_JS_FOLDER + ' -c ./jsdoc.json -r -d ' + locs.BUILD_PROD_FOLDER + '/docs', undefined, cb);
-  
+
 });
 
 //TODO: this is the implementation required for the koa mounting app tooling around. Have to repath all the files.
@@ -195,7 +223,7 @@ gulp.task('jsdoc_temp', function(cb){
     .pipe(replace('src="./docs/http', 'src="http'))
     .pipe(replace('href="./docs/http', 'href="http'))
     .pipe(gulp.dest("./build/public/docs/temp"));
-   
+
 });
 
 gulp.task('jsdoc_del', function(cb){
@@ -217,6 +245,16 @@ gulp.task('prod', ['serve_prod']);
 
 // =============== DEV =====================
 gulp.task('default', ['dev']);
+
+gulp.task('blackbox', function(){
+  var output = exec("json-server --port 3100 --watch " + locs.DB_PATH);
+  output.stdout.on('data', function(data){
+    console.log(data);
+  });
+  output.stderr.on('data', function(data) {
+    console.log(data);
+  });
+})
 
 gulp.task('test', function(cb){
   //spawn('mocha', [], {stdio: 'inherit'});
@@ -245,7 +283,9 @@ gulp.task('build_dev_html', function(){
   console.log('START DEV HTML BUILD');
   return gulp.src(locs.INDEX_FILE)
     .pipe(htmlreplace({
-      'js': locs.JS_NAME + '/' + locs.BUNDLE_DEV_NAME //NOTE: this is the relative file path referenced from server root
+      'fontawesome': locs.CSS_NAME + '/' + locs.FONT_AWESOME_DEV_NAME, //NOTE: this is the relative file path referenced from server root
+      'reactjs': locs.JS_NAME + '/' + locs.REACT_DEV_NAME, //NOTE: this is the relative file path referenced from server root
+      'bundlejs': locs.JS_NAME + '/' + locs.BUNDLE_DEV_NAME //NOTE: this is the relative file path referenced from server root
     }))
     .pipe(gulp.dest(locs.BUILD_DEV_FOLDER))
     .pipe(sync.stream())
@@ -255,7 +295,7 @@ var browserify_dev_props = {
         entries: [locs.APP_FILE],
         extensions: ['.js','.jsx'],
         insertGlobals: true,
-        transform: [babelify.configure({presets:["es2015", "react"]})],
+        transform: [babelify.configure({presets:["es2015", "stage-0", "react"]})],
         global: true,
         debug: true,
         cache: {},
@@ -267,6 +307,19 @@ var bundler_dev = watchify(browserify(browserify_dev_props));
 
 gulp.task('build_dev_js', function(){
   return build_dev_js();
+});
+
+gulp.task('build_dev_3rd_party', function() {
+  console.log('START DEV 3RD PARTY BUILD');
+  gulp.src("node_modules/font-awesome/fonts/**/")
+      .on('error', dontHangOnErrors)
+      .pipe(gulp.dest(locs.BUILD_DEV_FONTS_FOLDER));
+  gulp.src("node_modules/font-awesome/css/" + locs.FONT_AWESOME_DEV_NAME)
+      .on('error', dontHangOnErrors)
+      .pipe(gulp.dest(locs.BUILD_DEV_CSS_FOLDER));
+  gulp.src("node_modules/react/dist/" + locs.REACT_DEV_NAME)
+      .on('error', dontHangOnErrors)
+      .pipe(gulp.dest(locs.BUILD_DEV_JS_FOLDER));
 });
 
 var build_dev_js = function(){
@@ -316,7 +369,7 @@ gulp.task('build_dev_scss', function(){
 
 });
 
-gulp.task('build_dev', ['build_dev_html', 'build_dev_scss', 'build_dev_js']);
+gulp.task('build_dev', ['build_dev_html', 'build_dev_scss', 'build_dev_js', 'build_dev_3rd_party']);
 
 gulp.task('serve_dev', ['build_dev', 'watch_dev'], function(){
   console.log("Development Server Start");

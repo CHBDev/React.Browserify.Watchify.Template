@@ -11,6 +11,7 @@
   "devDependencies": {
     "babel-preset-es2015": "^6.1.2",
     "babel-preset-react": "^6.3.13",
+    "babel-preset-stage-0": "^6.3.13",
     "babelify": "^7.2.0",
     "browser-sync": "^2.10.0",
     "chai": "^3.4.1",
@@ -50,6 +51,7 @@
     "koa-static": "^1.5.2",
     "lodash": "^3.10.1",
     "react": "^0.14.2",
-    "react-dom": "^0.14.2"
+    "react-dom": "^0.14.2",
+    "wave1-blackbox-client": "git+ssh://git@stash.guidewire.com/orion/wave1-blackbox-client.git#0.1.2"
   }
 }

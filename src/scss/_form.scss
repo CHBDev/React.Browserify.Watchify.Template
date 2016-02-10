@@ -1,0 +1,64 @@
+.vehicle-details-form {
+  height: 100%;
+  .form-question {
+    padding: 4px 0 0;
+    font-size: smaller;
+  }
+  .submit-button {
+    padding: 8px 0 4px;
+  }
+  fieldset {
+    border: none;
+    padding: 2px 0 0 1px;
+  }
+  .form-question {
+    .radio-group {
+      padding: 0 4px;
+    }
+  }
+}
+.new-vehicle-form {
+  .top-links, .bottom-links {
+    text-align: left;
+    padding: 0 0 10px;
+    .top-link {
+      padding: 0 10px 0 0;
+    }
+  }
+  .bottom-links {
+    padding: 10px 0;
+  }
+  .form-question {
+    padding: 5px 0;
+    label {
+      display: inline-block;
+      width: 180px;
+    }
+    &.more-padding {
+      padding-bottom: 10px;
+    }
+    &.append-next {
+      display:inline;
+      padding-right: 5px;
+    }
+    &.append-to-previous {
+      display: inline
+    }
+    .new-vehicle-type {
+      width: 202px;
+    }
+    .new-vehicle-make-model {
+      width: 196px;
+    }
+    .new-vehicle-plate {
+      width: 130px;
+    }
+    .new-vehicle-state {
+      width: 61px;
+    }
+  }
+}
+
+.error {
+ border:1px solid red;
+}

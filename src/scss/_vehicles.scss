@@ -1,0 +1,99 @@
+.table.vehicles {
+  .vehicle-selected {
+    width: 20px;
+  }
+  .vehicle-year {
+    width: 40px;
+  }
+  .vehicle-make {
+    width: 60px;
+  }
+  .vehicle-model {
+    width: 70px;
+  }
+  .vehicle-plate {
+    width: 80px;
+  }
+  .vehicle-state {
+    width: 40px;
+  }
+  .vehicle-icon {
+    width: 20px;
+  }
+  .vehicle-editing {
+    width: 20px;
+  }
+  .table-caption {
+    font-size: smaller;
+  }
+  .fa-info-circle {
+    color: $info-icon-color;
+  }
+  .fa-minus-circle {
+    color: $delete-icon-color;
+  }
+  .fa-pencil-square-o {
+    color: $edit-icon-color
+  }
+  .selected-vehicles & {
+    .table-body .table-row {
+      background-color: $selected-item-color;
+    }
+    @include table-row-colors($selected-item-color, $selected-item-color, $expanded-selected-border-color);
+
+    &.alternating-row-colors {
+      @include alternating-table-row-colors($selected-item-color, $selected-item-color, $selected-item-color);
+    }
+  }
+}
+
+$card-image-size: 80px;
+.grid.vehicles {
+  .grid-caption {
+    font-size: smaller;
+  }
+  .vehicle-card {
+    position: relative;
+    text-align: center;
+    .card-line {
+      font-size: smaller;
+      padding: 3px;
+    }
+    .card-image {
+      width: $card-image-size;
+      height: $card-image-size;
+      margin: auto;
+      i.fa {
+        line-height: $card-image-size;
+      }
+    }
+  }
+  .expanded-detail {
+    position: relative;
+    .questions {
+      height: 80%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .submit-button {
+      position: absolute;
+      bottom: 0;
+      padding: 0;
+    }
+  }
+  .selected-vehicle-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .selected-vehicles & {
+    .grid-card {
+      background-color: $selected-item-color;
+    }
+    .expanded-grid-card {
+      background-color: $selected-item-color;
+    }
+  }
+}
+
