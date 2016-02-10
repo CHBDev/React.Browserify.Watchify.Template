@@ -1,0 +1,27 @@
+//import
+@import 'colors';
+@import 'form';
+@import 'gridCard';
+@import 'tableList';
+@import 'view';
+
+//vars
+$font-stack: Helvetica, sans-serif;
+$primary-color: #333;
+
+body {
+  font: 100% $font-stack;
+  color: $primary-color;
+}
+
+.app-pane {
+  width: 550px;
+  .app-header {
+    overflow: hidden;
+  }
+  .app-subHeader {
+    overflow: hidden;
+    margin: 5px 5px 20px;
+    font-size: smaller;
+  }
+}

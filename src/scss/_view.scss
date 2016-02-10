@@ -1,0 +1,17 @@
+.view-switcher {
+  float: right;
+  button {
+    margin: 5px;
+    i {
+      color: $switcher-color;
+    }
+    &.selected i {
+      color: $view-selected-color;
+    }
+  }
+}
+
+.section-heading {
+  font-size: smaller;
+  margin: 20px 0 2px;
+}

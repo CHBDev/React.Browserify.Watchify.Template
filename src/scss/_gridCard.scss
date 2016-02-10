@@ -1,0 +1,50 @@
+$card-width-height: 150px;
+$card-margin: 10px;
+$card-border-width: 2px;
+$number-cards-per-row: 3;
+
+.grid {
+  width: ($card-width-height + $card-margin + $card-border-width * 2) * $number-cards-per-row;
+  overflow: hidden;
+  .grid-caption {
+    padding: 0 0 $card-margin;
+  }
+  .grid-card {
+    border: $card-border-width solid $border-color;
+    float: left;
+    height: $card-width-height;
+    margin: 0 $card-margin $card-margin 0;
+    overflow: hidden;
+    width: $card-width-height;
+    &:hover {
+      background-color: $hilite-color;
+      box-shadow: 3px 3px 3px $card-drop-shadow-color;
+    }
+  }
+
+  .expanded-grid-card {
+    border: $card-border-width solid $expanded-border-color;
+    border-radius: 6px;
+    background-color: $expanded-color;
+    float: left;
+    height: $card-width-height;
+    margin: 0 $card-margin $card-margin 0;
+    overflow: hidden;
+    width: ($card-width-height + $card-margin) * $number-cards-per-row - 1;
+    &:hover {
+      box-shadow: 2px 2px 2px $card-drop-shadow-color;
+    }
+    .info {
+      border: none;
+      float: left;
+      height: $card-width-height;
+      width: $card-width-height;
+    }
+    .expanded-detail {
+      float: left;
+      height: $card-width-height - $card-margin * 2;
+      width: ($card-width-height + $card-margin) * 2;
+      margin: $card-margin 0;
+    }
+ }
+}
